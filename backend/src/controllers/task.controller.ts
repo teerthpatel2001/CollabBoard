@@ -35,7 +35,11 @@ export const createTask = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -108,7 +112,11 @@ export const getTask = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!) && !board.isPublic) {
+    // Check access: public board, owner, or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!board.isPublic && !isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -143,7 +151,11 @@ export const updateTask = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -197,7 +209,11 @@ export const deleteTask = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -250,7 +266,11 @@ export const moveTask = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -346,7 +366,11 @@ export const reorderTasks = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -391,7 +415,11 @@ export const addChecklistItem = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -437,7 +465,11 @@ export const updateChecklistItem = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 
@@ -486,7 +518,11 @@ export const deleteChecklistItem = async (
       throw new AppError('Board not found', 404);
     }
 
-    if (!board.isMember(userId!)) {
+    // Check if user is owner or member
+    const isOwner = board.owner.toString() === userId!;
+    const isMember = board.isMember(userId!);
+
+    if (!isOwner && !isMember) {
       throw new AppError('Access denied', 403);
     }
 

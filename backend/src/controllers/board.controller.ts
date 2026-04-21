@@ -51,8 +51,25 @@ export const getBoards = async (
       Board.countDocuments(query),
     ]);
 
+    // Transform boards to include id field
+    const transformedBoards = boards.map(board => ({
+      ...board,
+      id: board._id.toString(),
+      owner: board.owner ? {
+        ...board.owner,
+        id: board.owner._id?.toString(),
+      } : board.owner,
+      members: board.members?.map((m: { user: { _id?: { toString: () => string } } & Record<string, unknown> } & Record<string, unknown>) => ({
+        ...m,
+        user: m.user ? {
+          ...m.user,
+          id: m.user._id?.toString(),
+        } : m.user,
+      })) || [],
+    }));
+
     const result = {
-      boards,
+      boards: transformedBoards,
       pagination: {
         page: Number(page),
         limit: Number(limit),
@@ -81,6 +98,11 @@ export const getBoard = async (
   try {
     const { boardId } = req.params;
     const userId = req.user?.userId;
+
+    // Validate boardId
+    if (!boardId || boardId === 'undefined') {
+      throw new AppError('Invalid board ID', 400);
+    }
 
     const cacheKey = `board:${boardId}`;
 
@@ -142,11 +164,38 @@ export const getBoard = async (
       return acc;
     }, {} as Record<string, typeof tasks>);
 
+    // Transform tasks to include id
+    const transformedTasksByList: Record<string, unknown[]> = {};
+    for (const [listId, taskList] of Object.entries(tasksByList)) {
+      transformedTasksByList[listId] = taskList.map(task => ({
+        ...task,
+        id: task._id.toString(),
+        assignedTo: task.assignedTo ? {
+          ...task.assignedTo,
+          id: task.assignedTo._id?.toString(),
+        } : task.assignedTo,
+      }));
+    }
+
+    // Transform board with lists and tasks
     const boardWithLists = {
       ...board,
+      id: board._id.toString(),
+      owner: board.owner ? {
+        ...board.owner,
+        id: board.owner._id?.toString(),
+      } : board.owner,
+      members: board.members?.map((m: { user: { _id?: { toString: () => string } } & Record<string, unknown> } & Record<string, unknown>) => ({
+        ...m,
+        user: m.user ? {
+          ...m.user,
+          id: m.user._id?.toString(),
+        } : m.user,
+      })) || [],
       lists: lists.map((list) => ({
         ...list,
-        tasks: tasksByList[list._id.toString()] || [],
+        id: list._id.toString(),
+        tasks: transformedTasksByList[list._id.toString()] || [],
       })),
     };
 
@@ -207,9 +256,19 @@ export const createBoard = async (
       .populate('owner', 'name email avatar')
       .lean();
 
+    // Transform _id to id for frontend compatibility
+    const transformedBoard = populatedBoard ? {
+      ...populatedBoard,
+      id: populatedBoard._id.toString(),
+      owner: populatedBoard.owner ? {
+        ...populatedBoard.owner,
+        id: populatedBoard.owner._id?.toString(),
+      } : populatedBoard.owner,
+    } : null;
+
     res.status(201).json({
       success: true,
-      data: { board: populatedBoard },
+      data: { board: transformedBoard },
       message: 'Board created successfully',
     });
   } catch (error) {
