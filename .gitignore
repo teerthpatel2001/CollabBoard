@@ -49,6 +49,7 @@ Thumbs.db
 # Docker
 *.local.env
 docker-compose.override.yml
+docker-compose.yml
 
 # Misc
 .cache
