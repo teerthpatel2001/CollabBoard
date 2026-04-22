@@ -160,6 +160,7 @@ export default function KanbanBoard({ board, onTaskClick }: KanbanBoardProps) {
       styles: {
         active: {
           opacity: '0.5',
+          scale: '0.95',
         },
       },
     }),
@@ -199,8 +200,19 @@ export default function KanbanBoard({ board, onTaskClick }: KanbanBoardProps) {
               isOverlay
             />
           ) : activeList ? (
-            <div className="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 w-80 opacity-80">
-              <h3 className="font-medium text-gray-900 dark:text-white">{activeList.title}</h3>
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg w-80 shadow-2xl ring-2 ring-primary-500 rotate-3 scale-105 opacity-95 backdrop-blur-sm">
+              {/* Header */}
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="font-semibold text-gray-900 dark:text-white flex items-center">
+                  <span className="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></span>
+                  {activeList.title}
+                </h3>
+              </div>
+              {/* Content placeholder */}
+              <div className="p-4 space-y-2">
+                <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse delay-75"></div>
+              </div>
             </div>
           ) : null}
         </DragOverlay>

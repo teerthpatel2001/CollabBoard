@@ -99,9 +99,10 @@ boardSchema.virtual('taskCount', {
 
 // Method to check if user is a member
 boardSchema.methods.isMember = function (userId: string): boolean {
-  return this.members.some(
-    (member) => member.user.toString() === userId.toString()
-  );
+  return this.owner.toString() === userId.toString() ||
+    this.members.some(
+      (member) => member.user.toString() === userId.toString()
+    );
 };
 
 // Method to check if user is admin

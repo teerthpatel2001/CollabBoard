@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { PlusIcon, TrashIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TrashIcon, EllipsisHorizontalIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { List, Task } from '../../types';
 import { useBoardStore } from '../../stores';
@@ -38,7 +38,7 @@ export default function KanbanColumn({ list, boardId, onTaskClick }: KanbanColum
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: isDragging ? 'transform 0.1s ease' : transition,
   };
 
   const handleSaveTitle = async () => {
@@ -72,15 +72,17 @@ export default function KanbanColumn({ list, boardId, onTaskClick }: KanbanColum
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex-shrink-0 w-80 flex flex-col bg-gray-100 dark:bg-gray-800 rounded-lg ${
-        isDragging ? 'opacity-50' : ''
+      className={`flex-shrink-0 w-80 flex flex-col bg-gray-100 dark:bg-gray-800 rounded-lg transition-all duration-200 ${
+        isDragging
+          ? 'opacity-90 rotate-2 scale-105 shadow-2xl ring-2 ring-primary-500 z-50'
+          : 'hover:shadow-md'
       }`}
     >
       {/* Column Header */}
       <div
         {...attributes}
         {...listeners}
-        className="p-4 flex items-center justify-between cursor-grab active:cursor-grabbing"
+        className="p-4 flex items-center justify-between cursor-grab active:cursor-grabbing hover:bg-gray-200 dark:hover:bg-gray-700/50 transition-colors rounded-t-lg group/header"
       >
         {isEditing ? (
           <input

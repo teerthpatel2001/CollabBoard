@@ -18,11 +18,6 @@ export const createList = async (
       throw new AppError('Board not found', 404);
     }
 
-    // Check membership
-    if (!board.isMember(userId!)) {
-      throw new AppError('Access denied', 403);
-    }
-
     // Get next position if not provided
     let listPosition = position;
     if (listPosition === undefined) {

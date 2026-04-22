@@ -47,8 +47,8 @@ export default function KanbanTask({ task, onClick, isOverlay }: KanbanTaskProps
       className={`
         bg-white dark:bg-gray-700 p-3 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600
         cursor-pointer hover:shadow-md transition-shadow
-        ${isDragging ? 'opacity-50' : ''}
-        ${isOverlay ? 'shadow-xl rotate-2' : ''}
+        ${isDragging ? 'opacity-50 scale-95' : ''}
+        ${isOverlay ? 'shadow-2xl rotate-3 scale-105 ring-2 ring-primary-500' : ''}
       `}
     >
       {/* Labels */}
